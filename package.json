@@ -1,0 +1,24 @@
+{
+  "name": "onlineexams",
+  "version": "1.0.0",
+  "description": "Application where people can take their exams online",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "onlineexams"
+  ],
+  "author": "Pratheek",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.3",
+    "cors": "^2.8.5",
+    "express": "^4.17.2",
+    "lodash": "^4.17.21",
+    "mongoose": "^6.2.0",
+    "shortid": "^2.2.16",
+    "socket-io": "^1.0.0",
+    "socket.io": "^4.4.1"
+  }
+}
