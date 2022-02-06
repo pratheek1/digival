@@ -167,13 +167,11 @@ exports.shuffleAnswers = function(req, res) {
         },
         function(answers, next) {
             let random = answers.map(({ order }) => order);        
-            answers.forEach((o) => {
-                o.order = random.splice(Math.floor(Math.random() * random.length), 1)[0];
-            });
+            answers.forEach(o => o.order = random.splice(Math.floor(Math.random() * random.length), 1)[0]);
             async.eachSeries(answers, function(answer, iteratorNext) {
-                const findQuery = answer._id;
+                const findQuery = {_id: answer._id};
                 const updateObj = {order: answer.order}
-                answerModel.findOneAndUpdate(findQuery, {'$set': updateObj}, function(err, data) {
+                answerModel.update(findQuery, {'$set': updateObj}, function(err, data) {
                     if(err) {
                         return iteratorNext(err);
                     }
