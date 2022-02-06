@@ -5,7 +5,6 @@ const _  = require('lodash');
 const mongoose = require('mongoose');
 const questionModel = require('./questionModel');
 const answerModel = require('./answerModel');
-const { find } = require('lodash');
 
 exports.createQuestions = function(req, res) {
     let inputDate = req.body;
