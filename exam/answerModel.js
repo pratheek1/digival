@@ -7,7 +7,7 @@ const answerSchema = new Schema({
     value: {type: 'String'},
     isCorrectAns: {type: Boolean},
     deleted: {type: Boolean, default: false},
-    questionId: {type: mongoose.Types.ObjectId, ref: 'Exam'}
+    questionId: {type: mongoose.Types.ObjectId, ref: 'Exam'},
+    order: {type: Number}
 })
-
 module.exports = mongoose.model('Answer', answerSchema);

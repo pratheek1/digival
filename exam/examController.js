@@ -5,6 +5,7 @@ const _  = require('lodash');
 const mongoose = require('mongoose');
 const questionModel = require('./questionModel');
 const answerModel = require('./answerModel');
+const { find } = require('lodash');
 
 exports.createQuestions = function(req, res) {
     let inputDate = req.body;
@@ -147,5 +148,48 @@ exports.deleteQuestion = function(req, res) {
             return res.status(500).send('Error occurred while deleting questions');
         }
         return res.status(200).send('Successfully deleted question');
+    })
+}
+
+exports.shuffleAnswers = function(req, res) {
+    const questionId = req.params.questionId;
+    async.waterfall([
+        function(next) {
+            const findQuery = {questionId};
+            answerModel.find(findQuery)
+            .lean()
+            .exec(function(err, data) {
+                if(err) {
+                    return next(err);
+                }
+                next(err, data);
+            })
+        },
+        function(answers, next) {
+            let random = answers.map(({ order }) => order);        
+            answers.forEach((o) => {
+                o.order = random.splice(Math.floor(Math.random() * random.length), 1)[0];
+            });
+            async.eachSeries(answers, function(answer, iteratorNext) {
+                const findQuery = answer._id;
+                const updateObj = {order: answer.order}
+                answerModel.findOneAndUpdate(findQuery, {'$set': updateObj}, function(err, data) {
+                    if(err) {
+                        return iteratorNext(err);
+                    }
+                    return iteratorNext(err)
+                })
+            }, function done(err) {
+                if(err) {
+                    return next(err);
+                }
+                return next(err);
+            })
+        }
+    ], function done(err) {
+        if(err) {
+            return res.status(500).send('Error occured while shuffling answers');
+        }
+        return res.status(201).send('Successfully shuffled answers');
     })
 }
